@@ -3,12 +3,12 @@ from django.db.models import Q
 
 
 class Select2QuerySetView(autocomplete.Select2QuerySetView):
-    limit_queryset = 10
+    limit_queryset = 20
     queryset = None
     fields = ()
 
     def get_queryset(self):
-        if not getattr(self, 'queryset', None):
+        if self.queryset is None:
             raise AttributeError('You must specify "queryset" attribute '
                                  'or inherit "get_queryset" method')
 
@@ -17,9 +17,7 @@ class Select2QuerySetView(autocomplete.Select2QuerySetView):
             return qs.none()
         if self.q:
             qs = self.filter_qs(qs)
-        else:
-            return qs[:10]
-        return qs
+        return qs[:self.limit_queryset]
 
     def filter_qs(self, qs):
         if not getattr(self, 'fields', None):
