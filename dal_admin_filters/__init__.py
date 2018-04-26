@@ -14,6 +14,7 @@ class AutocompleteFilter(SimpleListFilter):
     title = ''
     field_name = ''
     autocomplete_url = ''
+    placeholder_prefix = ''
     is_placeholder_title = False
     widget_attrs = {}
 
@@ -49,7 +50,7 @@ class AutocompleteFilter(SimpleListFilter):
         attrs = self.widget_attrs.copy()
         attrs['id'] = 'id-%s-dal-filter' % self.lookup_kwarg
         if self.is_placeholder_title:
-            attrs['data-placeholder'] = "By " + self.title
+            attrs['data-placeholder'] = self.placeholder_prefix + self.title
         self.rendered_widget = field.widget.render(
             name=self.lookup_kwarg,
             value=self.used_parameters.get(self.parameter_name, ''),

@@ -3,6 +3,7 @@ from django.db.models import Q
 
 
 class Select2QuerySetView(autocomplete.Select2QuerySetView):
+    limit_queryset = 10
     queryset = None
     fields = ()
 
@@ -17,7 +18,7 @@ class Select2QuerySetView(autocomplete.Select2QuerySetView):
         if self.q:
             qs = self.filter_qs(qs)
         else:
-            return qs.none()
+            return qs[:10]
         return qs
 
     def filter_qs(self, qs):
