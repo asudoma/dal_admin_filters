@@ -18,12 +18,14 @@ class CountryFilter(AutocompleteFilter):
     title = 'Country from'
     parameter_name = 'city__country'
     autocomplete_url = 'country-autocomplete'
+    is_placeholder_title = False
 
 
 class CityFilter(AutocompleteFilter):
     title = 'City from'
     parameter_name = 'city'
     autocomplete_url = 'city-autocomplete'
+    is_placeholder_title = False
 
 
 class CityPlaceholderFilter(AutocompleteFilter):

@@ -1,10 +1,12 @@
 {% load i18n %}
-{% if not spec.is_placeholder_title %}
-    <h3>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
-{% endif %}
-    <ul>
-        <li>{{ spec.rendered_widget }}</li>
-    </ul>
+<div class="input-container">
+    {% if not spec.is_placeholder_title %}
+        <h3 class="input-title">{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
+    {% endif %}
+        <div class="select2-input-container">
+            {{ spec.rendered_widget }}
+        </div>
+</div>
 <script>
     (function($) {
         $(document).ready(function () {

@@ -15,7 +15,7 @@ class AutocompleteFilter(SimpleListFilter):
     field_name = ''
     autocomplete_url = ''
     placeholder_prefix = ''
-    is_placeholder_title = False
+    is_placeholder_title = True
     widget_attrs = {}
 
     class Media:
