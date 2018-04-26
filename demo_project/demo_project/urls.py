@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+
+from notes.views import CityAutocomplete
 from notes.views import CountryAutocomplete
 
 urlpatterns = [
@@ -22,6 +24,11 @@ urlpatterns = [
         r'^country-autocomplete/$',
         CountryAutocomplete.as_view(),
         name='country-autocomplete',
+    ),
+    url(
+        r'^city-autocomplete/$',
+        CityAutocomplete.as_view(),
+        name='city-autocomplete',
     ),
     url(r'^admin/', admin.site.urls),
 ]

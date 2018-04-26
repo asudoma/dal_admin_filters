@@ -1,21 +1,37 @@
-# -*- encoding: utf-8 -*-
-from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 
 
-@python_2_unicode_compatible
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Country'
+        verbose_name_plural = 'Countries'
 
-@python_2_unicode_compatible
-class Person(models.Model):
+
+class City(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    from_country = models.ForeignKey(Country)
+    country = models.ForeignKey(Country)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'City'
+        verbose_name_plural = 'Cities'
+
+
+class Person(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    city = models.ForeignKey(City)
+
+    def __str__(self):
+        return '{} {}'.format(self.first_name, self.last_name)
+
+    class Meta:
+        verbose_name = 'Person'
+        verbose_name_plural = 'People'

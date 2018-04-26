@@ -2,6 +2,7 @@
 from dal import autocomplete
 from django import forms
 from django.contrib.admin.filters import SimpleListFilter
+from django.contrib.admin.utils import get_fields_from_path
 from django.core.exceptions import ImproperlyConfigured
 from django.forms.widgets import Media, MEDIA_TYPES
 
@@ -31,32 +32,31 @@ class AutocompleteFilter(SimpleListFilter):
         )
 
     def __init__(self, request, params, model, model_admin):
-        if self.parameter_name:
-            raise AttributeError(
-                'Rename attribute `parameter_name` to '
-                '`field_name` for {}'.format(self.__class__)
-            )
-        self.parameter_name = '{}__id__exact'.format(self.field_name)
         super(AutocompleteFilter, self).__init__(request, params, model, model_admin)
+        self.lookup_kwarg = '{}__id__exact'.format(self.parameter_name)
 
         self._add_media(model_admin)
 
         field = forms.ModelChoiceField(
-            queryset=getattr(model, self.field_name).get_queryset(),
+            queryset=self.get_queryset_for_field(model, self.parameter_name),
             widget=autocomplete.ModelSelect2(
                 url=self.autocomplete_url,
             )
         )
 
         attrs = self.widget_attrs.copy()
-        attrs['id'] = 'id-%s-dal-filter' % self.field_name
+        attrs['id'] = 'id-%s-dal-filter' % self.lookup_kwarg
         if self.is_placeholder_title:
             attrs['data-placeholder'] = "By " + self.title
         self.rendered_widget = field.widget.render(
-            name=self.parameter_name,
+            name=self.lookup_kwarg,
             value=self.used_parameters.get(self.parameter_name, ''),
             attrs=attrs
         )
+
+    def get_queryset_for_field(self, model, field_path):
+        field = get_fields_from_path(model, field_path)[-1]
+        return field.related_model.objects.all()
 
     def _add_media(self, model_admin):
 
