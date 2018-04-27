@@ -1,23 +1,18 @@
 from dal import autocomplete
 from django.db.models import Q
+from django.views.generic.list import MultipleObjectMixin
 
 
 class Select2QuerySetView(autocomplete.Select2QuerySetView):
-    limit_queryset = 20
-    queryset = None
     fields = ()
 
     def get_queryset(self):
-        if self.queryset is None:
-            raise AttributeError('You must specify "queryset" attribute '
-                                 'or inherit "get_queryset" method')
-
-        qs = self.queryset
+        qs = MultipleObjectMixin.get_queryset(self)
         if not self.is_allowed():
             return qs.none()
         if self.q:
             qs = self.filter_qs(qs)
-        return qs[:self.limit_queryset]
+        return qs
 
     def filter_qs(self, qs):
         if not getattr(self, 'fields', None):
@@ -30,4 +25,4 @@ class Select2QuerySetView(autocomplete.Select2QuerySetView):
         return qs.filter(q)
 
     def is_allowed(self):
-        return self.request.user.is_authenticated() and self.request.user.is_staff
+        return True
