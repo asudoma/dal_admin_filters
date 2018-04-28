@@ -5,6 +5,7 @@ from django.views.generic.list import MultipleObjectMixin
 
 class Select2QuerySetView(autocomplete.Select2QuerySetView):
     fields = ()
+    lookup_expr = 'icontains'
 
     def get_queryset(self):
         qs = MultipleObjectMixin.get_queryset(self)
@@ -18,7 +19,13 @@ class Select2QuerySetView(autocomplete.Select2QuerySetView):
         if not getattr(self, 'fields', None):
             raise AttributeError('You must specify "fields" field '
                                  'or inherit "filter_qs" method')
-        queries = [Q(**{'{}__istartswith'.format(item): self.q}) for item in self.fields]
+        if not getattr(self, 'lookup_expr', None):
+            raise AttributeError('You must specify "lookup_expr" attribute')
+        queries = [
+            Q(**{
+                '{}__{}'.format(item, self.lookup_expr): self.q
+            }) for item in self.fields
+        ]
         q = queries.pop()
         for item in queries:
             q |= item
