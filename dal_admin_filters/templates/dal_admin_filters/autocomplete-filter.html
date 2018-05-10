@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="input-container">
+<div class="input-container dal-admin-filter">
     {% if not spec.is_placeholder_title %}
         <h3 class="input-title">{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</h3>
     {% endif %}
@@ -10,8 +10,8 @@
 <script>
     (function($) {
         $(document).ready(function () {
-            $('#changelist-filter select[name="{{ spec.lookup_kwarg }}"],' +
-                '.search-container select[name="{{ spec.lookup_kwarg }}"]').on('change',
+            $('#changelist-filter .select2-input-container select[name="{{ spec.parameter_name }}"],' +
+                '.search-container .select2-input-container select[name="{{ spec.parameter_name }}"]').on('change',
                 function (e, choice) {
                     var val = $(e.target).val() || '';
                     window.location.search = search_replace('{{ spec.parameter_name }}', val);
