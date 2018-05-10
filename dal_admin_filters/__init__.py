@@ -52,7 +52,7 @@ class AutocompleteFilter(SimpleListFilter):
         if self.is_placeholder_title:
             attrs['data-placeholder'] = self.placeholder_prefix + self.title
         self.rendered_widget = field.widget.render(
-            name=self.lookup_kwarg,
+            name=self.parameter_name,
             value=self.used_parameters.get(self.parameter_name, ''),
             attrs=attrs
         )
