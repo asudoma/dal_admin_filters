@@ -1,10 +1,11 @@
 args
 clint
-dal-admin-filters
-Django==1.11
-django-autocomplete-light
+dal-admin-filters==0.3.3
+Django==2.1.7
+django-autocomplete-light==3.3.2
 pkginfo
 requests
 requests-toolbelt
 twine
 six
+pytz==2018.9
