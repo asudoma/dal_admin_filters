@@ -13,6 +13,7 @@ class AutocompleteFilter(SimpleListFilter):
     template = "dal_admin_filters/autocomplete-filter.html"
     title = ''
     field_name = ''
+    field_pk = 'id'
     autocomplete_url = ''
     placeholder_prefix = ''
     is_placeholder_title = True
@@ -21,15 +22,17 @@ class AutocompleteFilter(SimpleListFilter):
     class Media:
         css = {
             'all': (
-                'autocomplete_light/vendor/select2/dist/css/select2.css',
+                'dal_admin_filters/css/select2.min.css',
                 'autocomplete_light/select2.css',
                 'dal_admin_filters/css/autocomplete-fix.css'
             )
         }
         js = (
+            'admin/js/jquery.init.js',
             'autocomplete_light/jquery.init.js',
+            'dal_admin_filters/js/select2.full.min.js',
             'autocomplete_light/autocomplete.init.js',
-            'autocomplete_light/vendor/select2/dist/js/select2.full.js',
+            'autocomplete_light/forward.js',
             'autocomplete_light/select2.js',
             'dal_admin_filters/js/querystring.js',
         )
@@ -43,7 +46,7 @@ class AutocompleteFilter(SimpleListFilter):
         field = forms.ModelChoiceField(
             queryset=self.get_queryset_for_field(model, self.parameter_name),
             widget=autocomplete.ModelSelect2(
-                url=self.autocomplete_url,
+                url=self.get_autocomplete_url(request),
             )
         )
 
@@ -73,6 +76,9 @@ class AutocompleteFilter(SimpleListFilter):
 
         for name in MEDIA_TYPES:
             setattr(model_admin.Media, name, getattr(media, "_" + name))
+
+    def get_autocomplete_url(self, request):
+        return self.autocomplete_url
 
     def has_output(self):
         return True
